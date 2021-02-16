@@ -184,7 +184,7 @@ public class RNWifiModule extends ReactContextBaseJavaModule {
      * @param promise  to send success/error feedback
      */
     @ReactMethod
-    public void connectToProtectedSSID(@NonNull final String SSID, @NonNull final String password, final boolean isWep, final Promise promise) {
+    public void connectToProtectedSSID(@NonNull final String SSID, @NonNull String password, final boolean isWep, final Promise promise) {
         final boolean locationPermissionGranted = PermissionUtils.isLocationPermissionGranted(context);
         if (!locationPermissionGranted) {
             promise.reject(ConnectErrorCodes.locationPermissionMissing.toString(), "Location permission (ACCESS_FINE_LOCATION) is not granted");
@@ -195,6 +195,11 @@ public class RNWifiModule extends ReactContextBaseJavaModule {
         if (!isLocationOn) {
             promise.reject(ConnectErrorCodes.locationServicesOff.toString(), "Location service is turned off");
             return;
+        }
+
+        // force wifi with a space in order to be ignored in the low level java library
+        if(password.isEmpty()){
+            password = " ";
         }
 
         WifiUtils.withContext(context)
