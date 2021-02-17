@@ -197,11 +197,6 @@ public class RNWifiModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        // force wifi with a space in order to be ignored in the low level java library
-        if(password.isEmpty()){
-            password = " ";
-        }
-
         WifiUtils.withContext(context)
                 .connectWith(SSID, password)
                 .setTimeout(CONNECT_TIMEOUT_IN_MILLISECONDS)
