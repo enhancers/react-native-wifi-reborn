@@ -46,7 +46,7 @@ public class RNWifiModule extends ReactContextBaseJavaModule {
     private final WifiManager wifi;
     private final ReactApplicationContext context;
 
-    final long CONNECT_TIMEOUT_IN_MILLISECONDS = 10000;
+    final long CONNECT_TIMEOUT_IN_MILLISECONDS = 30000;
 
     RNWifiModule(ReactApplicationContext context) {
         super(context);
