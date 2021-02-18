@@ -109,7 +109,8 @@ RCT_EXPORT_METHOD(connectToProtectedSSID:(NSString*)ssid
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
     // Prevent NEHotspotConfigurationManager error when connecting to an already connected network
-    if ([ssid isEqualToString:[self getWifiSSID]]) resolve(nil);
+//    if ([ssid isEqualToString:[self getWifiSSID]]) [self disconnectFromSSID:[self getWifiSSID] resolver:nil rejecter:nil]
+        
     if (@available(iOS 11.0, *)) {
         NEHotspotConfiguration* configuration;
         // Check if open network
@@ -148,6 +149,20 @@ RCT_EXPORT_METHOD(disconnectFromSSID:(NSString*)ssid
                 [[NEHotspotConfigurationManager sharedManager] removeConfigurationForSSID:ssid];
             }
             resolve(nil);
+        }];
+    } else {
+        reject([ConnectError code:UnavailableForOSVersion], @"Not supported in iOS<11.0", nil);
+    }
+
+}
+
+RCT_EXPORT_METHOD(getWifiListIOS
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+
+    if (@available(iOS 11.0, *)) {
+        [[NEHotspotConfigurationManager sharedManager] getConfiguredSSIDsWithCompletionHandler:^(NSArray<NSString *> *ssids) {
+            resolve(ssids);
         }];
     } else {
         reject([ConnectError code:UnavailableForOSVersion], @"Not supported in iOS<11.0", nil);
