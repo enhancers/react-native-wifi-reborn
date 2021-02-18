@@ -156,7 +156,7 @@ RCT_EXPORT_METHOD(disconnectFromSSID:(NSString*)ssid
 
 }
 
-RCT_EXPORT_METHOD(getWifiListIOS
+RCT_EXPORT_METHOD(getWifiListIOS:
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
 
