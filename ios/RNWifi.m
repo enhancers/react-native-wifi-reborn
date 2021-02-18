@@ -18,7 +18,7 @@
   if (self) {
       NSLog(@"RNWIFI:Init");
       self.solved = YES;
-          if (@available(iOS 13, *)) {
+          if (@available(iOS 11.0, *)) {
               self.locationManager = [[CLLocationManager alloc] init];
               self.locationManager.delegate = self;
           }
@@ -54,15 +54,16 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(connectToSSID:(NSString*)ssid
                   resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject) {
+                  rejecter:(RCTPromiseRejectBlock)reject
+                  ) {
     [self connectToProtectedSSID:ssid withPassphrase:@"" isWEP:false resolver:resolve rejecter:reject];
 }
 
-RCT_EXPORT_METHOD(connectToSSIDPrefix:(NSString*)ssid
+RCT_EXPORT_METHOD(connectToSSIDPrefix: (NSString*)ssid
                    resolver:(RCTPromiseResolveBlock)resolve
                    rejecter:(RCTPromiseRejectBlock)reject) {
 
-     if (@available(iOS 13.0, *)) {
+     if (@available(iOS 11.0, *)) {
          NEHotspotConfiguration* configuration = [[NEHotspotConfiguration alloc] initWithSSIDPrefix:ssid];
          configuration.joinOnce = false;
 
@@ -85,7 +86,7 @@ RCT_EXPORT_METHOD(connectToProtectedSSIDPrefix:(NSString*)ssid
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
 
-    if (@available(iOS 13.0, *)) {
+    if (@available(iOS 11.0, *)) {
         NEHotspotConfiguration* configuration = [[NEHotspotConfiguration alloc] initWithSSIDPrefix:ssid passphrase:passphrase isWEP:isWEP];
         configuration.joinOnce = false;
 
@@ -159,7 +160,7 @@ RCT_REMAP_METHOD(getCurrentWifiSSID,
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
 
-    if (@available(iOS 13, *)) {
+    if (@available(iOS 11.0, *)) {
         // Reject when permission had rejected
         if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied){
             NSLog(@"RNWIFI:ERROR:Cannot detect SSID because LocationPermission is Denied ");
@@ -173,7 +174,7 @@ RCT_REMAP_METHOD(getCurrentWifiSSID,
 
     BOOL hasLocationPermission = [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse ||
     [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways;
-    if (@available(iOS 13, *) && hasLocationPermission == NO) {
+    if (@available(iOS 11.0, *) && hasLocationPermission == NO) {
         // Need request LocationPermission or HotSpot or have VPN connection
         // https://forums.developer.apple.com/thread/117371#364495
         [self.locationManager requestWhenInUseAuthorization];

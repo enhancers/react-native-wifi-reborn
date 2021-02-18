@@ -28,6 +28,7 @@ DerivedData
 *.xcuserstate
 *.xcworkspace
 /ios/Pods/
+/ios/RCTBridgeModule.h
 
 # Android/IntelliJ
 #
