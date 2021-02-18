@@ -157,7 +157,7 @@ RCT_EXPORT_METHOD(disconnectFromSSID:(NSString*)ssid
 }
 
 RCT_EXPORT_METHOD(getWifiListIOS:
-                  resolver:(RCTPromiseResolveBlock)resolve
+                  (RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
 
     if (@available(iOS 11.0, *)) {
