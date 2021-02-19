@@ -108,44 +108,50 @@ RCT_EXPORT_METHOD(connectToProtectedSSID:(NSString*)ssid
                   isWEP:(BOOL)isWEP
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
-    // Prevent NEHotspotConfigurationManager error when connecting to an already connected network
-//    if ([ssid isEqualToString:[self getWifiSSID]]) [self disconnectFromSSID:[self getWifiSSID] resolver:nil rejecter:nil]
-        
-//    if ([ssid isEqualToString:[self getWifiSSID]]) {
-//        resolve(nil);
-//        return;
-//    }
+    
     
     if (@available(iOS 11.0, *)) {
-        [[NEHotspotConfigurationManager sharedManager] getConfiguredSSIDsWithCompletionHandler:^(NSArray<NSString *> *ssids) {
-            if (ssids != nil && [ssids indexOfObject:ssid] != NSNotFound) {
-                [[NEHotspotConfigurationManager sharedManager] removeConfigurationForSSID:ssid];
-            }
-           
-            // connect to wifi
-            NEHotspotConfiguration* configuration;
-            // Check if open network
-            if (passphrase == (id)[NSNull null] || passphrase.length == 0 ) {
-                configuration = [[NEHotspotConfiguration alloc] initWithSSID:ssid];
-            } else {
-                configuration = [[NEHotspotConfiguration alloc] initWithSSID:ssid passphrase:passphrase isWEP:isWEP];
-            }
-            configuration.joinOnce = false;
-
-            [[NEHotspotConfigurationManager sharedManager] applyConfiguration:configuration completionHandler:^(NSError * _Nullable error) {
-                if (error != nil) {
-                    reject([self parseError:error], [error localizedDescription], error);
-                } else {
-                    // Verify SSID connection
-                    if ([ssid isEqualToString:[self getWifiSSID]]){
-                        resolve(nil);
-                    } else {
-                        reject([ConnectError code:UnableToConnect], [NSString stringWithFormat:@"%@/%@", @"Unable to connect to ", ssid], nil);
-                    }
-                }
-            }];
+        
+        // Prevent NEHotspotConfigurationManager error when connecting to an already connected network
+    //    if ([ssid isEqualToString:[self getWifiSSID]]) [self disconnectFromSSID:[self getWifiSSID] resolver:nil rejecter:nil]
             
+    //    if ([ssid isEqualToString:[self getWifiSSID]]) {
+    //        resolve(nil);
+    //        return;
+    //    }
+        
+//        [[NEHotspotConfigurationManager sharedManager] getConfiguredSSIDsWithCompletionHandler:^(NSArray<NSString *> *ssids) {
+//            if (ssids != nil && [ssids indexOfObject:ssid] != NSNotFound) {
+//                [[NEHotspotConfigurationManager sharedManager] removeConfigurationForSSID:ssid];
+//            }
+//        }];
+        
+        [[NEHotspotConfigurationManager sharedManager] removeConfigurationForSSID:ssid];
+           
+        // connect to wifi
+        NEHotspotConfiguration* configuration;
+        // Check if open network
+        if (passphrase == (id)[NSNull null] || passphrase.length == 0 ) {
+            configuration = [[NEHotspotConfiguration alloc] initWithSSID:ssid];
+        } else {
+            configuration = [[NEHotspotConfiguration alloc] initWithSSID:ssid passphrase:passphrase isWEP:isWEP];
+        }
+        configuration.joinOnce = false;
+
+        [[NEHotspotConfigurationManager sharedManager] applyConfiguration:configuration completionHandler:^(NSError * _Nullable error) {
+            if (error != nil) {
+                reject([self parseError:error], [error localizedDescription], error);
+            } else {
+                // Verify SSID connection
+                if ([ssid isEqualToString:[self getWifiSSID]]){
+                    resolve(nil);
+                } else {
+                    reject([ConnectError code:UnableToConnect], [NSString stringWithFormat:@"%@/%@", @"Unable to connect to ", ssid], nil);
+                }
+            }
         }];
+            
+        
     } else {
         reject([ConnectError code:UnavailableForOSVersion], @"Not supported in iOS<11.0", nil);
     }
