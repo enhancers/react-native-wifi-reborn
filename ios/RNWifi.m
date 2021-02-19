@@ -63,7 +63,7 @@ RCT_EXPORT_METHOD(connectToSSIDPrefix: (NSString*)ssid
                    resolver:(RCTPromiseResolveBlock)resolve
                    rejecter:(RCTPromiseRejectBlock)reject) {
 
-     if (@available(iOS 11.0, *)) {
+     if (@available(iOS 13.0, *)) {
          NEHotspotConfiguration* configuration = [[NEHotspotConfiguration alloc] initWithSSIDPrefix:ssid];
          configuration.joinOnce = false;
 
@@ -86,7 +86,7 @@ RCT_EXPORT_METHOD(connectToProtectedSSIDPrefix:(NSString*)ssid
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
 
-    if (@available(iOS 11.0, *)) {
+    if (@available(iOS 13.0, *)) {
         NEHotspotConfiguration* configuration = [[NEHotspotConfiguration alloc] initWithSSIDPrefix:ssid passphrase:passphrase isWEP:isWEP];
         configuration.joinOnce = false;
 
