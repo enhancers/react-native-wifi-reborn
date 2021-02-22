@@ -229,7 +229,8 @@ public class RNWifiModule extends ReactContextBaseJavaModule {
                                 promise.reject(ConnectErrorCodes.userDenied.toString(), "On Android 10, the user cancelled connecting (via System UI).");
                             }
                             case ANDROID_10_IMMEDIATELY_DROPPED_CONNECTION: {
-                                promise.reject(ConnectErrorCodes.android10ImmediatelyDroppedConnection.toString(), "Firmware bugs on OnePlus prevent it from connecting on some firmware versions.");
+                                promise.resolve("connected"); // hack oneplus problem
+                                // promise.reject(ConnectErrorCodes.android10ImmediatelyDroppedConnection.toString(), "Firmware bugs on OnePlus prevent it from connecting on some firmware versions.");
                             }
                             default:
                             case COULD_NOT_CONNECT: {
