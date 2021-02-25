@@ -108,26 +108,26 @@ RCT_EXPORT_METHOD(connectToProtectedSSID:(NSString*)ssid
                   isWEP:(BOOL)isWEP
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
-    
-    
+
+
     if (@available(iOS 11.0, *)) {
-        
+
         // Prevent NEHotspotConfigurationManager error when connecting to an already connected network
     //    if ([ssid isEqualToString:[self getWifiSSID]]) [self disconnectFromSSID:[self getWifiSSID] resolver:nil rejecter:nil]
-            
+
     //    if ([ssid isEqualToString:[self getWifiSSID]]) {
     //        resolve(nil);
     //        return;
     //    }
-        
+
 //        [[NEHotspotConfigurationManager sharedManager] getConfiguredSSIDsWithCompletionHandler:^(NSArray<NSString *> *ssids) {
 //            if (ssids != nil && [ssids indexOfObject:ssid] != NSNotFound) {
 //                [[NEHotspotConfigurationManager sharedManager] removeConfigurationForSSID:ssid];
 //            }
 //        }];
-        
+
         [[NEHotspotConfigurationManager sharedManager] removeConfigurationForSSID:ssid];
-           
+
         // connect to wifi
         NEHotspotConfiguration* configuration;
         // Check if open network
@@ -150,8 +150,8 @@ RCT_EXPORT_METHOD(connectToProtectedSSID:(NSString*)ssid
                 }
             }
         }];
-            
-        
+
+
     } else {
         reject([ConnectError code:UnavailableForOSVersion], @"Not supported in iOS<11.0", nil);
     }
@@ -185,7 +185,22 @@ RCT_EXPORT_METHOD(getWifiListIOS:
     } else {
         reject([ConnectError code:UnavailableForOSVersion], @"Not supported in iOS<11.0", nil);
     }
+}
 
+RCT_EXPORT_METHOD(isPreciseLocationPermissionEnabled:
+                  (RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    if (@available(iOS 11.0, *)) {
+        // Reject when permission had rejected
+        if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted){
+            NSLog(@"RNWIFI:ERROR:Cannot detect SSID because LocationPermission is Restricted ");
+            reject([ConnectError code:LocationPermissionRestricted], @"Cannot detect SSID because LocationPermission is Restricted", nil);
+        }else{
+            resolve(nil);
+        }
+    }else{
+        resolve(nil);
+    }
 }
 
 
@@ -244,11 +259,11 @@ RCT_REMAP_METHOD(getCurrentWifiSSID,
 
 - (NSString *)parseError:(NSError *)error {
     if (@available(iOS 11, *)) {
-        
+
         if (!error) {
             return [ConnectError code:UnableToConnect];
         };
-        
+
         /*
          NEHotspotConfigurationErrorInvalid                         = 0,
          NEHotspotConfigurationErrorInvalidSSID                     = 1,
