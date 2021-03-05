@@ -144,7 +144,7 @@ RCT_EXPORT_METHOD(connectToProtectedSSID:(NSString*)ssid
             } else {
                 // Verify SSID connection
                 if ([ssid isEqualToString:[self getWifiSSID]]){
-                    resolve(nil);
+                    resolve(ssid);
                 } else {
                     reject([ConnectError code:UnableToConnect], [NSString stringWithFormat:@"%@/%@", @"Unable to connect to ", ssid], nil);
                 }
