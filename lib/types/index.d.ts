@@ -100,7 +100,7 @@ declare module 'react-native-wifi-reborn' {
         SSID: string,
         password: string | null,
         isWEP: boolean
-    ): Promise<void>;
+    ): Promise<string>;
 
     export enum GET_CURRENT_WIFI_SSID_ERRRORS {
         CouldNotDetectSSID = 'CouldNotDetectSSID',
@@ -114,7 +114,7 @@ declare module 'react-native-wifi-reborn' {
     //#region iOS only
 
     export function connectToSSID(SSID: string): Promise<void>;
-    export function connectToSSIDPrefix(SSIDPrefix: string): Promise<string>;
+    export function connectToSSIDPrefix(SSIDPrefix: string): Promise<void>;
     export function disconnectFromSSID(SSIDPrefix: string): Promise<void>;
     export function getWifiListIOS(): Promise<Array<string>>;
     export function isPreciseLocationPermissionEnabled(): Promise<void>;
